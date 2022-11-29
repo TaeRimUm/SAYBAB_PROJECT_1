@@ -9,10 +9,17 @@ import server
 import gamestop
 from saybar import Saybar
 from Enemy import Skul
+from Hamburger import hamburger
 from background import FixedBackground as Background
 
 
 def enter():
+
+    global Hamburger
+    server.Hamburger = hamburger()
+    Hamburger = [hamburger() for i in range(4)]
+    game_world.add_objects(Hamburger, 2)
+
     global saybar
     server.saybar = Saybar()
     game_world.add_object(server.saybar, 2)
@@ -28,6 +35,9 @@ def enter():
     # 충돌 대상 정보 등록
     game_world.add_collision_pairs(server.saybar, Enemy, 'Saybar:Skul')
     # 'Saybar:Skul' 이란 그룹의 이름으로 Saybar와 Skul의 충돌하겠다라는걸 저장함.
+    game_world.add_collision_pairs(server.saybar, Enemy, 'Skul:hamburger')
+
+
 
 def exit():
     game_world.clear()
@@ -52,7 +62,6 @@ def handle_events():
 
         if (event.type, event.key) == (SDL_KEYDOWN, SDLK_q):
             game_framework.push_state(gamestop)
-                         # ㄴ> push -> change
 
 
 
