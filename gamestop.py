@@ -19,7 +19,6 @@ def exit():
     pass
 
 def update():
-
     pass
 
 def do(self):
@@ -44,6 +43,12 @@ def handle_events():
         elif event.type == SDL_KEYDOWN: #and event.key == SDLK_ESCAPE:
             # game_framework.change_state(logo_state)
             match event.key:
-                case pico2d.SDLK_ESCAPE:
+                case pico2d.SDLK_w:
                     print('일시정지 끝남')
                     game_framework.pop_state()
+
+                    #RD -> Q -> RU -> W ==> RD (change to RU)
+                    #LD -> Q -> LU -> W ==> LD (change to LU)
+                    #즉 이동키를 누른 상태로 일시정지를 누르고, 이동키를 땠고 일시정지를 풀면
+                    #캐릭터가 이동키를 누른 방향으로 쭈우욱 달려나감.
+
