@@ -31,7 +31,6 @@ key_event_table = {
 
     (SDL_KEYDOWN, SDLK_d): DD,
     (SDL_KEYUP, SDLK_d): DU,
-
     (SDL_KEYUP, SDLK_UP): UPKEY_UP,
     (SDL_KEYUP, SDLK_DOWN): DOWNKEY_UP,
     (SDL_KEYDOWN, SDLK_UP): UPKEY_DOWN,
@@ -40,7 +39,6 @@ key_event_table = {
 
 
 # Saybar States
-
 class WalkingState:
 
     def enter(self, event):
@@ -56,6 +54,7 @@ class WalkingState:
         elif event == LU:
             print('왼쪽키 땜')
             self.x_velocity += RUN_SPEED_PPS
+
 
         if event == UPKEY_DOWN:
             self.y_velocity += RUN_SPEED_PPS
@@ -83,12 +82,12 @@ class WalkingState:
         self.y += self.y_velocity * game_framework.frame_time
 
         self.x = clamp(0, self.x, server.background.w - 1)
-        self.y = clamp(50, self.y, server.background.h - 1)
+        self.y = clamp(50, self.y, server.background.h - 620)
 
         global start #1회용 함수임! 맨 처음 시작했을 때, 지정한 위치로 배치하기 위한 함수. 리스폰이라고 보면 됨.
         if start == 0:
             self.x = clamp(25, 750, server.background.w - 1)
-            self.y = clamp(50, 50, server.background.h - 1)
+            self.y = clamp(100, 50, server.background.h - 1)
             start = 1 #start를 1로 해서, 다시 쓸일이 없도록 하기.
             return 0
 
@@ -216,17 +215,17 @@ class Saybar:
         if (event.type, event.key) in key_event_table:
             key_event = key_event_table[(event.type, event.key)]
             self.add_event(key_event)
+
+
     def handle_collision(self, other, group):
         pass #충돌 되어도, 아무 반응없기.
 
     def get_bb(self): #박스의 왼쪽 좌표, 오른쪽 좌표 알려주기(4개의 값을 넘겨주기)
 
         if self.attack_velocity == 1 and self.dir == 1:
-            print('오른쪽 공격 충돌 판정 박스 그리기')
             return self.x - - 15, self.y - 30, self.x + 100, self.y + 30
 
         elif self.attack_velocity == 1 and self.dir == -1:
-            print('왼쪽 공격 충돌 판정 박스 그리기')
             return self.x - 100, self.y - 30, self.x + 15, self.y + 30
 
         return 0, 0, 0, 0
