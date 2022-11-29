@@ -1,5 +1,4 @@
 import random
-
 import game_framework
 import server
 from pico2d import *
@@ -31,7 +30,7 @@ class Skul:
         if Skul.image == None:
             Skul.image = load_image('Enemy_Skul_1.png')
 
-        self.x, self.y, self.fall_speed = random.randint(50, 1600), 50, 0
+        self.x, self.y, self.fall_speed = random.randint(50, 1600), random.randint(50, 150), 0
 
 
     def draw(self):
