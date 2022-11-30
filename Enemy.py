@@ -3,8 +3,10 @@ import game_framework
 import server
 from pico2d import *
 import game_world
+import winsound
 
 from BehaviorTree import BehaviorTree, Selector, Sequence, Leaf
+from Hamburger import hamburger
 
 
 # Skul Run Speed
@@ -19,34 +21,67 @@ TIME_PER_ACTION = 0.5
 ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
 FRAMES_PER_ACTION = 8
 
+animation_names = ['Idle', 'Walk']
+
 class Skul:
     frame = 0
     image = None
 
-
+    def load_images(self):
+        if Skul.image == None:
+            Skul.image = {}
+            for name in animation_names:
+                Skul.image[name] = [load_image("./Skul_files/" + name + " (%d)" % i + ".png") for i in range(1, 11)]
 
     def do(self):
         self.x = clamp(0, self.x, 1600)
 
     def __init__(self):
+
+        self.dir = random.random() * 2 * math.pi
+        self.speed = 0
+        self.timer = 1.0 # change direction every 1 sec when wandering
+        self.frame = 0.0
+        self.load_images()
+        self.hp = 0
+        self.target_Hamburger = None
+
         print('Skul에 있는 메소드 실행(해골 소환)')
         self.font = load_font('ENCR10B.TTF', 16) # x, y가 이동한 위치 나타내는 글씨 크기
-        if Skul.image == None:
-            Skul.image = load_image('Enemy_Skul_1.png')
-
         self.x, self.y, self.fall_speed = random.randint(50, 1600), random.randint(50, 150), 0
+
+    def calculate_current_position(self):
+        self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
+        self.x += self.speed * math.cos(self.dir) * game_framework.frame_time
+        self.y += self.speed * math.sin(self.dir) * game_framework.frame_time
+        self.x = clamp(50, self.x, 1280 - 50)
+        self.y = clamp(50, self.y, 1024 - 50)
+
+    def update(self):
+        # fill here
+        self.bt.run()
+        self.calculate_current_position()
 
 
     def draw(self):
         sx, sy = self.x - server.background.window_left, self.y - server.background.window_bottom
         self.font.draw(sx - 40, sy + 40, '(%d, %d)' % (self.x, self.y), (25, 25, 0))
 
+
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
-        self.image.clip_draw(int(self.frame) * 100, 200, 100, 100, sx, sy)
+        # self.image.clip_draw(int(self.frame) * 100, 200, 100, 100, sx, sy)
 
         if math.cos(self.dir) < 0:
             if self.speed == 0:
-                self.image.clip_draw(int(self.frame) * 100, 200, 100, 100, sx, sy)
+                Skul.image['Idle'][int(self.frame)].composite_draw(0, 'h', sx, sy, 100, 100)
+            else:
+                Skul.image['Walk'][int(self.frame)].composite_draw(0, 'h', sx, sy, 100, 100)
+        else:
+            if self.speed == 0:
+                Skul.image['Idle'][int(self.frame)].draw(sx, sy, 100, 100)
+            else:
+                Skul.image['Walk'][int(self.frame)].draw(sx, sy, 100, 100)
+
 
         #draw_rectangle(*self.get_bb())  # pico2d 가 제공하는 사각형 그리는거
         #이건 야매 방법인데, sx랑 sy를 어케든 만지면 (충돌박스 + 해골이미지) 같이 움직이게 할 수 있는데,
@@ -74,11 +109,11 @@ class Skul:
         shortest_distance = 1280 ** 2
         # find in-sight(5meters) and nearest ball
         for o in game_world.all_objects():
-            if type(o) is Ball:
-                ball = o
-        distance = (ball.x - self.x) ** 2 + (ball.y - self.y) ** 2
+            if type(o) is hamburger:
+                Hamburger = o
+        distance = (Hamburger.x - self.x) ** 2 + (Hamburger.y - self.y) ** 2
         if distance < (PIXEL_PER_METER * 7) ** 2 and distance < shortest_distance:
-            self.target_ball = ball
+            self.target_ball = Hamburger
         shortest_distance = distance
         if self.target_ball is not None:
             self.tx, self.ty = self.target_ball.x, self.target_ball.y
@@ -109,7 +144,7 @@ class Skul:
         shortest_distance = 1280 ** 2 #max를 찾기위한 방법(가장 긴 거리)
         # find in-sight(5meters) and nearest ball
         for o in game_world.all_objects(): #게임 월드에 있는 모든 오브젝트를 가져와서
-            if type(o) is Ball:            #그게 볼인지 아닌지 파악. 볼만 찾아야 함.
+            if type(o) is hamburger:            #그게 볼인지 아닌지 파악. 볼만 찾아야 함.
                 ball = o                   #그 볼에 대해서
                 distance = (ball.x - self.x) ** 2 + (ball.y - self.y) ** 2 #볼과 좀비와 거리를 계산
                 if distance < (PIXEL_PER_METER * 7) ** 2 and distance < shortest_distance:
@@ -122,15 +157,20 @@ class Skul:
         else:
             return BehaviorTree.FAIL #만약 7m이네에 볼이 없으면 실패.
 
-    def move_to_boy(self):
+
+    def calculate_squared_distance(self, a, b):
+        return (a.x-b.x)**2 + (a.y-b.y)**2
+
+
+    def move_to_Hamburger(self):
         # fill here
-        distance = self.calculate_squared_distance(self, server.boy)
+        distance = self.calculate_squared_distance(self, server.Hamburger)
         if distance > (PIXEL_PER_METER * 10) ** 2:
             self.speed = 0
             return BehaviorTree.FAIL
 
-        if self.hp > server.boy.hp:
-            self.dir = math.atan2(server.boy.y - self.y, server.boy.x - self.x)
+        if self.hp > server.Hamburger.hp:
+            self.dir = math.atan2(server.Hamburger.y - self.y, server.Hamburger.x - self.x)
             if distance < (PIXEL_PER_METER * 0.5) ** 2:
                 self.speed = 0
                 return BehaviorTree.SUCCESS
@@ -141,18 +181,18 @@ class Skul:
             self.speed = 0
             return BehaviorTree.FAIL
 
-    def flee_from_boy(self):
+    def flee_from_Hamburger(self):
         # fill here
         # move_to_node = Leaf('Move To', self.move_to)
         # self.bt = BehaviorTree(move_to_node)
 
-        distance = self.calculate_squared_distance(self, server.boy)
+        distance = self.calculate_squared_distance(self, server.Hamburger)
         if distance > (PIXEL_PER_METER * 10) ** 2:
             self.speed = 0
             return BehaviorTree.FAIL
 
-        if self.hp <= server.boy.hp:
-            self.dir = math.atan2(self.y - server.boy.y, self.x - server.boy.x)
+        if self.hp <= server.Hamburger.hp:
+            self.dir = math.atan2(self.y - server.Hamburger.y, self.x - server.Hamburger.x)
             self.speed = RUN_SPEED_PPS
             return BehaviorTree.RUNNING
         else:
@@ -165,11 +205,7 @@ class Skul:
         play_beep_node = Leaf('Play Beep', self.play_beep)
         wander_sequence = Sequence('Wander', find_random_location_node, move_to_node, play_beep_node)
         find_ball_location_node = Leaf('Find Ball Location', self.find_ball_location)
-        eat_ball_sequence = Sequence('Eat Ball', find_ball_location_node, move_to_node, play_beep_node)
-        wander_or_eat_ball_selector = Selector('Wander & Eat Ball', eat_ball_sequence, wander_sequence)
-        move_to_boy_node = Leaf('Move to Boy', self.move_to_boy)
-        flee_from_boy_node = Leaf('Flee from Boy', self.flee_from_boy)
-        chase_or_flee_selector = Selector('Chase or Flee Boy', move_to_boy_node, flee_from_boy_node)
-        final_selector = Selector('Final', chase_or_flee_selector, wander_or_eat_ball_selector)
-        self.bt = BehaviorTree(final_selector)
-        # 좀비가 볼을 계속 먹으면서, 점수가 더 높으면 나를 따
+        eat_ball_sequence = Sequence('Eat hambergur', find_ball_location_node, move_to_node, play_beep_node)
+        wander_or_eat_ball_selector = Selector('Wander or Eat hambergur', eat_ball_sequence, wander_sequence)
+        self.bt = BehaviorTree(wander_or_eat_ball_selector)
+        #좀비가 볼을 먹고, 계속 볼을 향해서 이동함. 하지만 7m거리 밖에 있으면 안먹고 멈춤.
