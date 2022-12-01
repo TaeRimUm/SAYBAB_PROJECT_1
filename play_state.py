@@ -22,7 +22,7 @@ def enter():
 
     global saybar
     server.saybar = Saybar()
-    game_world.add_object(server.saybar, 2)
+    game_world.add_object(server.saybar, 3)
 
     server.background = Background()
     game_world.add_object(server.background, 0)
@@ -35,7 +35,7 @@ def enter():
     # 충돌 대상 정보 등록
     game_world.add_collision_pairs(server.saybar, Enemy, 'Saybar:Skul')
     # 'Saybar:Skul' 이란 그룹의 이름으로 Saybar와 Skul의 충돌하겠다라는걸 저장함.
-    game_world.add_collision_pairs(server.Hamburger, Enemy, 'hamburger:Skul')
+    game_world.add_collision_pairs(Hamburger, Enemy, 'hamburger:Skul')
 
 
 
