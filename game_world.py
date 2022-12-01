@@ -10,14 +10,6 @@ def add_object(o, depth):
 def add_objects(ol, depth):
     objects[depth] += ol
 
-def remove_object(o):
-    for layer in objects:
-        if o in layer:
-            layer.remove(o)
-            del o
-            return
-    raise ValueError('Trying destroy non existing object')
-
 
 def remove_object(o):
     for layer in objects:
@@ -28,7 +20,7 @@ def remove_object(o):
             return
         except:
             pass
-    raise ValueError('Trying destroy non existing object')
+    raise ValueError('Trying destroy non existing object') #존재하지 않는 객체 삭제하려 함.
 
 
 def all_objects():
@@ -38,10 +30,16 @@ def all_objects():
 
 
 def clear():
-    for o in all_objects():
-        del o
-    for layer in objects:
-        layer.clear()
+    global objects
+    global collision_group
+    # nullify objects and collision group delete all the contained objects - automatic garbage collection
+    objects = [[],[]]
+    collision_group = dict()
+
+    # for o in all_objects():
+    #     del o
+    # for layer in objects:
+    #     layer.clear()
 
 
 def add_collision_pairs(a, b, group):
