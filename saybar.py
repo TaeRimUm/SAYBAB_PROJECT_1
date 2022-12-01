@@ -82,7 +82,7 @@ class WalkingState:
         self.y += self.y_velocity * game_framework.frame_time
 
         self.x = clamp(0, self.x, server.background.w - 1)
-        self.y = clamp(50, self.y, server.background.h - 620)
+        self.y = clamp(50, self.y, server.background.h - 1)
 
         global start #1회용 함수임! 맨 처음 시작했을 때, 지정한 위치로 배치하기 위한 함수. 리스폰이라고 보면 됨.
         if start == 0:
@@ -215,7 +215,6 @@ class Saybar:
         if (event.type, event.key) in key_event_table:
             key_event = key_event_table[(event.type, event.key)]
             self.add_event(key_event)
-
 
     def handle_collision(self, other, group):
         pass #충돌 되어도, 아무 반응없기.
