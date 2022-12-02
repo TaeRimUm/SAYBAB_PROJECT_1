@@ -34,12 +34,13 @@ class Skul2:
         if Skul2.images == None:
             Skul2.images = {}
             for name in animation_names:
-                Skul2.images[name] = [load_image("./Skul/" + name + " (%d)" % i + ".png") for i in range(1, 11)]
+                Skul2.images[name] = [load_image("./Skul2/" + name + " (%d)" % i + ".png") for i in range(1, 11)]
 
     # def do(self):
     #     self.x = clamp(0, self.x, 1600)
 
     def __init__(self, name='NONAME', x=0, y=0, size=1):
+        print('Skul2에 있는 메소드 실행(해골 소환)')
         self.name = name
         self.x, self.y = x * PIXEL_PER_METER, y * PIXEL_PER_METER
         self.size = size
@@ -55,7 +56,7 @@ class Skul2:
         self.hp = 0
         self.target_Hamburger = None
 
-        print('Skul2에 있는 메소드 실행(해골 소환)')
+        # print('Skul2에 있는 메소드 실행(해골 소환)')
         self.font = load_font('ENCR10B.TTF', 16) # x, y가 이동한 위치 나타내는 글씨 크기
         self.x, self.y, self.fall_speed = random.randint(1550, 1600), random.randint(50, 600), 0
 
@@ -100,12 +101,13 @@ class Skul2:
 
 
     def update(self):
-        # fill here
+        # print넣으면 계~속 반복됨.
         self.bt.run()
         self.calculate_current_position()
 
 
     def draw(self):
+        # print넣으면 계~속 반복됨.
         sx, sy = self.x - server.background.window_left, self.y - server.background.window_bottom
         self.font.draw(sx - 40, sy + 40, '(%d, %d)' % (self.x, self.y), (25, 25, 0))
 
