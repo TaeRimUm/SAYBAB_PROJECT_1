@@ -1,7 +1,7 @@
 
 # layer 0: Background Objects
 # layer 1: Foreground Objects
-objects = [[], [], [], []]
+objects = [[], [], [], [],[]]
 collision_group = dict()
 
 def add_object(o, depth):
@@ -46,7 +46,7 @@ def add_collision_pairs(a, b, group):
 
     if group not in collision_group:
         print('Add new group ', group)
-        collision_group[group] = [ [], [], [], [] ] # list of list : list pair
+        collision_group[group] = [ [], [], [], [], [] ]# list of list : list pair
 
     if a:
         if type(a) is list:
