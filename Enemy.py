@@ -57,9 +57,8 @@ class Skul:
 
         print('Skul에 있는 메소드 실행(해골 소환)')
         self.font = load_font('ENCR10B.TTF', 16) # x, y가 이동한 위치 나타내는 글씨 크기
-        self.x, self.y, self.fall_speed = random.randint(50, 150), random.randint(50, 600), 0
-        self.x, self.y, self.fall_speed = random.randint(1500, 1600), random.randint(50, 600), 0
-        # self.x, self.y, self.fall_speed = random.randint(1590, 1600), random.randint(50, 150), 0
+        self.x, self.y, self.fall_speed = random.randint(50, 100), random.randint(50, 600), 0
+
 
     def __getstate__(self):
         state = {'x': self.x, 'y': self.y, 'dir': self.dir, 'name': self.name, 'size': self.size}
