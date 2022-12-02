@@ -36,8 +36,8 @@ class Skul:
             for name in animation_names:
                 Skul.images[name] = [load_image("./Skul_files/" + name + " (%d)" % i + ".png") for i in range(1, 11)]
 
-    def do(self):
-        self.x = clamp(0, self.x, 1600)
+    # def do(self):
+    #     self.x = clamp(0, self.x, 1600)
 
     def __init__(self, name='NONAME', x=0, y=0, size=1):
         self.name = name
@@ -57,8 +57,8 @@ class Skul:
 
         print('Skul에 있는 메소드 실행(해골 소환)')
         self.font = load_font('ENCR10B.TTF', 16) # x, y가 이동한 위치 나타내는 글씨 크기
-        self.x, self.y, self.fall_speed = random.randint(50, 1600), random.randint(50, 600), 0
-        # self.x, self.y, self.fall_speed = random.randint(50, 60), random.randint(50, 150), 0
+        self.x, self.y, self.fall_speed = random.randint(50, 150), random.randint(50, 600), 0
+        self.x, self.y, self.fall_speed = random.randint(1500, 1600), random.randint(50, 600), 0
         # self.x, self.y, self.fall_speed = random.randint(1590, 1600), random.randint(50, 150), 0
 
     def __getstate__(self):
@@ -148,18 +148,18 @@ class Skul:
         shortest_distance = 1280 ** 2 #max를 찾기위한 방법(가장 긴 거리)
         # find in-sight(5meters) and nearest Hamburger
         for o in game_world.all_objects(): #게임 월드에 있는 모든 오브젝트를 가져와서
-            if type(o) is hamburger:            #그게 볼인지 아닌지 파악. 볼만 찾아야 함.
-                Hamburger = o                   #그 볼에 대해서
-                distance = (Hamburger.x - self.x) ** 2 + (Hamburger.y - self.y) ** 2 #볼과 좀비와 거리를 계산
-                if distance < (PIXEL_PER_METER * 100) ** 2 and distance < shortest_distance:
-                    #그 계산한 거리가 7M 이하이고, 동시에 distance < 최대 거리(가장 긴 거리): 이면
-                    self.target_Hamburger = Hamburger #타겟에 발견됐으면 현재 볼로 해주기.
+            if type(o) is hamburger:            #그게 햄버거인지 아닌지 파악. 햄버거만 찾아야 함.
+                Hamburger = o                   #그 햄버거에 대해서
+                distance = (Hamburger.x - self.x) ** 2 + (Hamburger.y - self.y) ** 2 #햄버거와 해골의 거리를 계산
+                if distance < (PIXEL_PER_METER * 100) ** 2 and distance <= shortest_distance:
+                    #그 계산한 거리가 100M 이하이고, 동시에 distance < 최대 거리(가장 긴 거리): 이면
+                    self.target_Hamburger = Hamburger #타겟에 발견됐으면 현재 햄버거로 해주기.
                     shortest_distance = distance
-        if self.target_Hamburger is not None: #이렇게 해서 가장 가까운걸 찾기! 그 볼이 찾아졌으면,
+        if self.target_Hamburger is not None: #이렇게 해서 가장 가까운걸 찾기! 그 햄버거가 찾아졌으면,
             self.tx, self.ty = self.target_Hamburger.x, self.target_Hamburger.y #타겟을 설정해서
             return BehaviorTree.SUCCESS #성공.
         else:
-            return BehaviorTree.FAIL #만약 7m이네에 볼이 없으면 실패.
+            return BehaviorTree.FAIL #만약 100m이네에 볼이 없으면 실패.
 
 
 
