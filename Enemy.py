@@ -34,7 +34,7 @@ class Skul:
         if Skul.images == None:
             Skul.images = {}
             for name in animation_names:
-                Skul.images[name] = [load_image("./Skul1/" + name + " (%d)" % i + ".png") for i in range(1, 11)]
+                Skul.images[name] = [load_image("./Skul_1/" + name + " (%d)" % i + ".png") for i in range(1, 11)]
 
     # def do(self):
     #     self.x = clamp(0, self.x, 1600)
