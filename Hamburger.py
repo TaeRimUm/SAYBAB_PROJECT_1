@@ -44,3 +44,6 @@ class hamburger:
         if group == 'hamburger:Skul': #햄버거 입장에서 해골이 부딪히면
             hamburger.eat_sound.play()
             game_world.remove_object(self)
+        if group == 'hamburger:Skul2': #햄버거 입장에서 해골2이 부딪히면
+            hamburger.eat_sound.play()
+            game_world.remove_object(self)
