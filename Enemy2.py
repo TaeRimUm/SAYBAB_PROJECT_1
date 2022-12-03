@@ -16,20 +16,19 @@ from Hamburger import hamburger
 
 # Skul2 Run Speed
 PIXEL_PER_METER = (10.0 / 0.3)  # 10 pixel 30 cm
-RUN_SPEED_KMPH = 5.0  # Km / Hour
+RUN_SPEED_KMPH = 8.0  # Km / Hour
 RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
 RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
 RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
 
 # Skul2 Action Speed
-TIME_PER_ACTION = 0.5
+TIME_PER_ACTION = 1.0
 ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
 FRAMES_PER_ACTION = 10
 
 animation_names = ['Idle', 'Walk']
 
 class Skul2: #오른쪽
-    print("class skul2 실행")
     frame = 0
     images = None
     font = None
@@ -59,7 +58,7 @@ class Skul2: #오른쪽
         self.hp = 0
         self.target_Hamburger = None
 
-        self.x, self.y, self.fall_speed = random.randint(1580, 1590), random.randint(1, 750), 0
+        self.x, self.y, self.fall_speed = random.randint(1300, 1400), random.randint(1, 750), 0
 
 
     def __getstate__(self):
@@ -68,7 +67,6 @@ class Skul2: #오른쪽
 
     def __setstate__(self, state):
         self.__init__()
-        self.siganal()
         self.__dict__.update(state)
 
     def calculate_current_position(self):
@@ -76,7 +74,7 @@ class Skul2: #오른쪽
         self.x += self.speed * math.cos(self.dir) * game_framework.frame_time
         self.y += self.speed * math.sin(self.dir) * game_framework.frame_time
         self.x = clamp(0, self.x, get_canvas_width() + 750)
-        self.y = clamp(0, self.y, get_canvas_height() - 100)
+        self.y = clamp(0, self.y, get_canvas_height() +300)
 
     def find_random_location(self):
         self.tx, self.ty = random.randint(50, get_canvas_width()-50), random.randint(50, get_canvas_height() - 50)
@@ -92,6 +90,24 @@ class Skul2: #오른쪽
             self.speed = RUN_SPEED_PPS
             return BehaviorTree.RUNNING
 
+    def flee_from_saybar(self):
+        # fill here
+        # move_to_node = Leaf('Move To', self.move_to)
+        # self.bt = BehaviorTree(move_to_node)
+
+        distance = self.calculate_squared_distance(self, server.saybar)
+        if distance > (PIXEL_PER_METER * 10) ** 2:
+            self.speed = 0
+            return BehaviorTree.FAIL
+
+        if self.hp <= server.saybar.hp:
+            self.dir = math.atan2(self.y - server.saybar.y, self.x - server.saybar.x)
+            self.speed = RUN_SPEED_PPS
+            return BehaviorTree.RUNNING
+        else:
+            self.speed = 0
+            return BehaviorTree.FAIL
+
     def build_behavior_tree(self): #move_to_node를 생성, self.move_to 함수를 연결
 
         find_random_location_node = Leaf('Find Random Location', self.find_random_location)
@@ -99,7 +115,10 @@ class Skul2: #오른쪽
         wander_sequence = Sequence('Wander', find_random_location_node, move_to_node)
         find_Hamburger_location_node = Leaf('Find hamburger Location', self.find_Hamburger_location)
         eat_Hamburger_sequence = Sequence('Eat hamburger', find_Hamburger_location_node, move_to_node)
-        self.bt = BehaviorTree(eat_Hamburger_sequence)
+        wander_or_eat_ball_selector = Selector('Wander & Eat hamburger', eat_Hamburger_sequence, wander_sequence)
+        flee_from_saybar_node = Leaf('Flee from Saybar', self.flee_from_saybar)
+        final_selector = Selector('Final', flee_from_saybar_node, wander_or_eat_ball_selector)
+        self.bt = BehaviorTree(final_selector)
 
 
     def update(self):
@@ -154,8 +173,8 @@ class Skul2: #오른쪽
             if type(o) is hamburger:            #그게 햄버거인지 아닌지 파악. 햄버거만 찾아야 함.
                 Hamburger = o                   #그 햄버거에 대해서
                 distance = (Hamburger.x - self.x) ** 2 + (Hamburger.y - self.y) ** 2 #햄버거와 해골의 거리를 계산
-                if distance < (PIXEL_PER_METER * 100) ** 2 and distance <= shortest_distance:
-                    #그 계산한 거리가 100M 이하이고, 동시에 distance < 최대 거리(가장 긴 거리): 이면
+                if distance < (PIXEL_PER_METER * 500) ** 2 and distance <= shortest_distance:
+                    #그 계산한 거리가 500m 이하이고, 동시에 distance < 최대 거리(가장 긴 거리): 이면
                     self.target_Hamburger = Hamburger #타겟에 발견됐으면 현재 햄버거로 해주기.
                     shortest_distance = distance
         if self.target_Hamburger is not None: #이렇게 해서 가장 가까운걸 찾기! 그 햄버거가 찾아졌으면,
