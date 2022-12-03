@@ -8,15 +8,15 @@ start = 0
 
 # Saybar Run Speed
 PIXEL_PER_METER = (10.0 / 0.3)  # 10 pixel 30 cm
-RUN_SPEED_KMPH = 30.0  # Km / Hour
+RUN_SPEED_KMPH = 20.0  # Km / Hour
 RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
 RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
 RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
 
 # Saybar Action Speed
-TIME_PER_ACTION = 0.5
+TIME_PER_ACTION = 1.0
 ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
-FRAMES_PER_ACTION = 8
+FRAMES_PER_ACTION = 18
 
 
 # Saybar Event
@@ -222,9 +222,9 @@ class Saybar:
     def get_bb(self): #박스의 왼쪽 좌표, 오른쪽 좌표 알려주기(4개의 값을 넘겨주기)
 
         if self.attack_velocity == 1 and self.dir == 1:
-            return self.x - - 15, self.y - 30, self.x + 100, self.y + 30
+            return self.x - - 15, self.y - 30, self.x + 50, self.y + 50
 
         elif self.attack_velocity == 1 and self.dir == -1:
-            return self.x - 100, self.y - 30, self.x + 15, self.y + 30
+            return self.x - 50, self.y - 30, self.x + 15, self.y + 50
 
         return 0, 0, 0, 0
