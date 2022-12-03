@@ -68,8 +68,10 @@ class WalkingState:
         if event == DD:
             print('존나 때리기')
             self.attack_velocity += 1
+
         elif event == DU:
             self.attack_velocity -= 1
+
 
 
     def exit(self, event):
@@ -82,12 +84,12 @@ class WalkingState:
         self.y += self.y_velocity * game_framework.frame_time
 
         self.x = clamp(0, self.x, server.background.w - 1)
-        self.y = clamp(50, self.y, server.background.h - 1)
+        self.y = clamp(0, self.y, server.background.h - 1)
 
         global start #1회용 함수임! 맨 처음 시작했을 때, 지정한 위치로 배치하기 위한 함수. 리스폰이라고 보면 됨.
         if start == 0:
             self.x = clamp(25, 750, server.background.w - 1)
-            self.y = clamp(100, 50, server.background.h - 1)
+            self.y = clamp(400, 50, server.background.h - 1)
             start = 1 #start를 1로 해서, 다시 쓸일이 없도록 하기.
             return 0
 
@@ -105,9 +107,11 @@ class WalkingState:
 
         elif self.x_velocity > 0:                         #오른쪽으로 뛰기
             self.image.clip_draw(int(self.frame) * 100, 100, 100, 100, sx, sy)
+            self.hp += 100
             self.dir = 1
         elif self.x_velocity < 0:                       #왼쪽으로 뛰기
             self.image.clip_draw(int(self.frame) * 100, 0, 100, 100, sx, sy)
+            self.hp += 100
             self.dir = -1
 
         else:
@@ -115,14 +119,18 @@ class WalkingState:
             if self.y_velocity > 0 or self.y_velocity < 0 :
                 if self.dir == 1:
                     self.image.clip_draw(int(self.frame) * 100, 100, 100, 100, sx, sy)
+                    self.hp += 100
                 else:
                     self.image.clip_draw(int(self.frame) * 100, 0, 100, 100, sx, sy)
+                    self.hp += 100
             else:
                 # Saybar is idle
                 if self.dir == 1:                               #오른쪽보고 대기
                     self.image.clip_draw(int(self.frame) * 100, 300, 100, 100, sx, sy)
+                    self.hp += 100
                 else:                                           #왼쪽보고 대기
                     self.image.clip_draw(int(self.frame) * 100, 200, 100, 100, sx, sy)
+                    self.hp += 100
 
 
         if self.attack_velocity == 1 and self.dir == 1:
@@ -133,7 +141,7 @@ class WalkingState:
 
         elif self.attack_velocity == 1:
             self.ATTACK.clip_draw(int(self.frame) * 200, 0, 200, 100, sx, sy)
-
+            self.dir += 0
         elif self.attack_velocity == -1:
             print('그만 때리기')
 
@@ -174,6 +182,7 @@ class Saybar:
         self.font = load_font('ENCR10B.TTF', 16) # x, y가 이동한 위치 나타내는 글씨 크기
         self.ATTACK = load_image('attack_d.png')
         self.dir = 0
+        self.hp = 0
 
         self.x_velocity, self.y_velocity = 0, 0
         self.attack_velocity = 0
@@ -183,6 +192,14 @@ class Saybar:
         self.cur_state = WalkingState
         self.cur_state.enter(self, None)
         self.x, self.y = get_canvas_width() // 2, get_canvas_height() // 2
+
+    def __getstate__(self):
+        state = {'x': self.x, 'y': self.y, 'dir': self.dir, 'cur_state': self.cur_state}
+        return state
+
+    def __setstate__(self, state):
+        self.__init__()
+        self.__dict__.update(state)
 
 
     def get_bb(self):
@@ -217,7 +234,7 @@ class Saybar:
             self.add_event(key_event)
 
     def handle_collision(self, other, group):
-        pass #충돌 되어도, 아무 반응없기.
+        pass
 
     def get_bb(self): #박스의 왼쪽 좌표, 오른쪽 좌표 알려주기(4개의 값을 넘겨주기)
 
