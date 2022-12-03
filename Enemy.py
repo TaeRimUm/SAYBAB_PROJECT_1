@@ -15,7 +15,7 @@ from Hamburger import hamburger
 
 # Skul Run Speed
 PIXEL_PER_METER = (10.0 / 0.3)  # 10 pixel 30 cm
-RUN_SPEED_KMPH = 10.0  # Km / Hour
+RUN_SPEED_KMPH = 5.0  # Km / Hour
 RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
 RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
 RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
@@ -27,7 +27,7 @@ FRAMES_PER_ACTION = 10
 
 animation_names = ['Idle', 'Walk']
 
-class Skul:
+class Skul: #왼쪽
     frame = 0
     images = None
     font = None
@@ -59,7 +59,7 @@ class Skul:
         self.target_Hamburger = None
 
         self.font = load_font('ENCR10B.TTF', 16) # x, y가 이동한 위치 나타내는 글씨 크기
-        self.x, self.y, self.fall_speed = random.randint(50, 100), random.randint(50, 600), 0
+        self.x, self.y, self.fall_speed = random.randint(10, 20), random.randint(1, 750), 0
 
     def __getstate__(self):
         state = {'x': self.x, 'y': self.y, 'dir': self.dir, 'name': self.name, 'size': self.size}
@@ -73,8 +73,8 @@ class Skul:
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
         self.x += self.speed * math.cos(self.dir) * game_framework.frame_time
         self.y += self.speed * math.sin(self.dir) * game_framework.frame_time
-        self.x = clamp(50, self.x, get_canvas_width() + 600)
-        self.y = clamp(50, self.y, get_canvas_height() - 50)
+        self.x = clamp(0, self.x, get_canvas_width() + 750)
+        self.y = clamp(0, self.y, get_canvas_height() - 10)
 
     def find_random_location(self):
         self.tx, self.ty = random.randint(50, get_canvas_width()-50), random.randint(50, get_canvas_height() - 50)
@@ -109,7 +109,7 @@ class Skul:
     def draw(self):
         #print넣으면 계~속 반복됨.
         sx, sy = self.x - server.background.window_left, self.y - server.background.window_bottom
-        self.font.draw(sx - 40, sy + 40, '(%d, %d)' % (self.x, self.y), (25, 25, 0))
+        # self.font.draw(sx - 40, sy + 40, '(%d, %d)' % (self.x, self.y), (25, 25, 0))
 
 
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
