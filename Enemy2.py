@@ -1,5 +1,9 @@
 import random
+import time
+import threading
+    #pip install threading
 
+#pip install schedule
 import Hamburger
 import game_framework
 import server
@@ -9,7 +13,6 @@ import winsound
 
 from BehaviorTree import BehaviorTree, Selector, Sequence, Leaf
 from Hamburger import hamburger
-
 
 # Skul2 Run Speed
 PIXEL_PER_METER = (10.0 / 0.3)  # 10 pixel 30 cm
@@ -26,6 +29,7 @@ FRAMES_PER_ACTION = 10
 animation_names = ['Idle', 'Walk']
 
 class Skul2:
+    print("class skul2 실행")
     frame = 0
     images = None
     font = None
@@ -40,7 +44,7 @@ class Skul2:
     #     self.x = clamp(0, self.x, 1600)
 
     def __init__(self, name='NONAME', x=0, y=0, size=1):
-        print('Skul2에 있는 메소드 실행(해골 소환)')
+        # print('Skul2에 있는 메소드 실행(해골 소환)')
         self.name = name
         self.x, self.y = x * PIXEL_PER_METER, y * PIXEL_PER_METER
         self.size = size
@@ -52,12 +56,9 @@ class Skul2:
         self.timer = 1.0  # change direction every 1 sec when wandering
         self.frame = 0
         self.build_behavior_tree()
-
         self.hp = 0
         self.target_Hamburger = None
 
-        # print('Skul2에 있는 메소드 실행(해골 소환)')
-        self.font = load_font('ENCR10B.TTF', 16) # x, y가 이동한 위치 나타내는 글씨 크기
         self.x, self.y, self.fall_speed = random.randint(1550, 1600), random.randint(50, 600), 0
 
 
@@ -67,6 +68,7 @@ class Skul2:
 
     def __setstate__(self, state):
         self.__init__()
+        self.siganal()
         self.__dict__.update(state)
 
     def calculate_current_position(self):
