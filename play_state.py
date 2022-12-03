@@ -8,8 +8,12 @@ import game_world
 import server
 import gamestop
 from saybar import Saybar
+
 from Enemy import Skul
 from Enemy2 import Skul2
+from Enemy3 import Skul3
+from Enemy4 import Skul4
+
 from Hamburger import hamburger
 from background import FixedBackground as Background
 
@@ -18,7 +22,7 @@ def enter():
 
     global Hamburger
     server.Hamburger = hamburger()
-    Hamburger = [hamburger() for i in range(4)]
+    Hamburger = [hamburger() for i in range(30)]
     game_world.add_objects(Hamburger, 2)
 
     global saybar
@@ -38,12 +42,26 @@ def enter():
     Enemy2 = [Skul2() for i in range(10)]
     game_world.add_objects(Enemy2, 1)
 
+    global Enemy3
+    server.Enemy3 = Skul3()
+    Enemy3 = [Skul3() for i in range(10)]
+    game_world.add_objects(Enemy3, 1)
+
+    global Enemy4
+    server.Enemy4 = Skul4()
+    Enemy4 = [Skul4() for i in range(10)]
+    game_world.add_objects(Enemy4, 1)
+
     # 충돌 대상 정보 등록
     game_world.add_collision_pairs(server.saybar, Enemy, 'Saybar:Skul')
     game_world.add_collision_pairs(server.saybar, Enemy2, 'Saybar:Skul2')
+    game_world.add_collision_pairs(server.saybar, Enemy3, 'Saybar:Skul3')
+    game_world.add_collision_pairs(server.saybar, Enemy4, 'Saybar:Skul4')
     # 'Saybar:Skul' 이란 그룹의 이름으로 Saybar와 Skul의 충돌하겠다라는걸 저장함.
     game_world.add_collision_pairs(Hamburger, Enemy, 'hamburger:Skul')
     game_world.add_collision_pairs(Hamburger, Enemy2, 'hamburger:Skul2')
+    game_world.add_collision_pairs(Hamburger, Enemy3, 'hamburger:Skul3')
+    game_world.add_collision_pairs(Hamburger, Enemy4, 'hamburger:Skul4')
 
 
 
