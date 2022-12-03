@@ -91,7 +91,7 @@ def run(start_state):
     global running, stack
     running = True
     stack = [start_state]
-    start_state.enter()
+    start_state.main()
 
     global frame_time
     current_time = time.time()
