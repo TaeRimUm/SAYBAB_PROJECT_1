@@ -1,3 +1,4 @@
+import pickle
 
 # layer 0: Background Objects
 # layer 1: Foreground Objects
@@ -82,5 +83,18 @@ def remove_collision_object(o):
 def update():
     for game_object in all_objects():
         game_object.update()
+
+
+def save():
+    game = [objects, collision_group]
+    with open('game.sav', 'wb') as f:
+        pickle.dump(game, f)
+
+def load():
+    global objects, collision_group
+    with open('game.sav', 'rb') as f:
+        game = pickle.load(f)
+        objects, collision_group = game[0], game[1]
+
 
 
