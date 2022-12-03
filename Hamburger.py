@@ -8,16 +8,17 @@ class hamburger:
     image = None
     eat_sound = None
 
+
     def __init__(self):
         print('햄버거 배치')
         if hamburger.image == None:
             hamburger.image = load_image('Hamburger.png')
 
         if hamburger.eat_sound is None:
-            hamburger.eat_sound = load_wav('nyang.mp3')
+            hamburger.eat_sound = random(load_wav('nyang_1.mp3'), load_wav('nyang_2.mp3'), load_wav('nyang_3.mp3'))
             hamburger.eat_sound.set_volume(32)
 
-        self.x, self.y, self.fall_speed = random.randint(400, 1100), random.randint(50, 600), 0
+        self.x, self.y, self.fall_speed = random.randint(100, 1600), random.randint(100, 750), 0
 
     def __getstate__(self):
         state = {'x': self.x, 'y': self.y}
