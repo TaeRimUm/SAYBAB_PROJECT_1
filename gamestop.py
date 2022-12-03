@@ -31,7 +31,7 @@ def draw():
 
     #이거 왜 무한반복하지#
     print('일시정지')
-    gamestop.draw(500, 300)
+    gamestop.draw(50, 560)
     update_canvas()
 
 
