@@ -29,7 +29,7 @@ class hamburger:
 
 
     def get_bb(self):  # 박스의 왼쪽 좌표, 오른쪽 좌표 알려주기(4개의 값을 넘겨주기)
-        return self.x - 20, self.y - 30, self.x + 20, self.y + 20
+        return self.x - 10, self.y - 10, self.x + 10, self.y + 10
 
     def draw(self):
         sx, sy = self.x - server.background.window_left, self.y - server.background.window_bottom
@@ -45,5 +45,11 @@ class hamburger:
             hamburger.eat_sound.play()
             game_world.remove_object(self)
         if group == 'hamburger:Skul2': #햄버거 입장에서 해골2이 부딪히면
+            hamburger.eat_sound.play()
+            game_world.remove_object(self)
+        if group == 'hamburger:Skul3':
+            hamburger.eat_sound.play()
+            game_world.remove_object(self)
+        if group == 'hamburger:Skul4':
             hamburger.eat_sound.play()
             game_world.remove_object(self)
