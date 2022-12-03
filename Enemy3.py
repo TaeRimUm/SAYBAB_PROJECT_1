@@ -16,13 +16,13 @@ from Hamburger import hamburger
 
 # Skul3 Run Speed
 PIXEL_PER_METER = (10.0 / 0.3)  # 10 pixel 30 cm
-RUN_SPEED_KMPH = 5.0  # Km / Hour
+RUN_SPEED_KMPH = 8.0  # Km / Hour
 RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
 RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
 RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
 
 # Skul3 Action Speed
-TIME_PER_ACTION = 0.5
+TIME_PER_ACTION = 1.0
 ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
 FRAMES_PER_ACTION = 10
 
@@ -67,7 +67,6 @@ class Skul3: #맨 아래
 
     def __setstate__(self, state):
         self.__init__()
-        self.siganal()
         self.__dict__.update(state)
 
     def calculate_current_position(self):
@@ -91,6 +90,24 @@ class Skul3: #맨 아래
             self.speed = RUN_SPEED_PPS
             return BehaviorTree.RUNNING
 
+    def flee_from_saybar(self):
+        # fill here
+        # move_to_node = Leaf('Move To', self.move_to)
+        # self.bt = BehaviorTree(move_to_node)
+
+        distance = self.calculate_squared_distance(self, server.saybar)
+        if distance > (PIXEL_PER_METER * 10) ** 2:
+            self.speed = 0
+            return BehaviorTree.FAIL
+
+        if self.hp <= server.saybar.hp:
+            self.dir = math.atan2(self.y - server.saybar.y, self.x - server.saybar.x)
+            self.speed = RUN_SPEED_PPS
+            return BehaviorTree.RUNNING
+        else:
+            self.speed = 0
+            return BehaviorTree.FAIL
+
     def build_behavior_tree(self): #move_to_node를 생성, self.move_to 함수를 연결
 
         find_random_location_node = Leaf('Find Random Location', self.find_random_location)
@@ -98,7 +115,10 @@ class Skul3: #맨 아래
         wander_sequence = Sequence('Wander', find_random_location_node, move_to_node)
         find_Hamburger_location_node = Leaf('Find hamburger Location', self.find_Hamburger_location)
         eat_Hamburger_sequence = Sequence('Eat hamburger', find_Hamburger_location_node, move_to_node)
-        self.bt = BehaviorTree(eat_Hamburger_sequence)
+        wander_or_eat_ball_selector = Selector('Wander & Eat hamburger', eat_Hamburger_sequence, wander_sequence)
+        flee_from_saybar_node = Leaf('Flee from Saybar', self.flee_from_saybar)
+        final_selector = Selector('Final', flee_from_saybar_node, wander_or_eat_ball_selector)
+        self.bt = BehaviorTree(final_selector)
 
 
     def update(self):
