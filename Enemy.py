@@ -1,5 +1,7 @@
 import random
-
+import time
+import schedule
+    #pip install schedule
 import Hamburger
 import game_framework
 import server
@@ -40,6 +42,7 @@ class Skul:
     #     self.x = clamp(0, self.x, 1600)
 
     def __init__(self, name='NONAME', x=0, y=0, size=1):
+        print('Skul에 있는 메소드 실행(해골 소환)')
         self.name = name
         self.x, self.y = x * PIXEL_PER_METER, y * PIXEL_PER_METER
         self.size = size
