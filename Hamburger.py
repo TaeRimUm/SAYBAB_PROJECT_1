@@ -15,7 +15,7 @@ class hamburger:
             hamburger.image = load_image('Hamburger.png')
 
         if hamburger.eat_sound is None:
-            hamburger.eat_sound = random(load_wav('nyang_1.mp3'), load_wav('nyang_2.mp3'), load_wav('nyang_3.mp3'))
+            hamburger.eat_sound = load_wav('nyang.mp3')
             hamburger.eat_sound.set_volume(32)
 
         self.x, self.y, self.fall_speed = random.randint(100, 1600), random.randint(100, 750), 0
