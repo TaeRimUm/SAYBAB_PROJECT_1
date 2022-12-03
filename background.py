@@ -29,9 +29,9 @@ class FixedBackground:
         self.window_bottom = clamp(0,
                                    int(server.saybar.y) - self.canvas_height // 2,
                                    self.h - self.canvas_height - 1)
-
     def handle_event(self, event):
         pass
+
 
 
 
