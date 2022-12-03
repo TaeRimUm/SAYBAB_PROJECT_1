@@ -33,7 +33,7 @@ def clear():
     global objects
     global collision_group
     # nullify objects and collision group delete all the contained objects - automatic garbage collection
-    objects = [[],[]]
+    objects = [[], [], []]
     collision_group = dict()
 
     # for o in all_objects():
