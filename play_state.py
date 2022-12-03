@@ -22,7 +22,7 @@ def enter():
 
     global Hamburger
     server.Hamburger = hamburger()
-    Hamburger = [hamburger() for i in range(30)]
+    Hamburger = [hamburger() for i in range(100)]
     game_world.add_objects(Hamburger, 2)
 
     global saybar
@@ -34,22 +34,22 @@ def enter():
 
     global Enemy
     server.Enemy = Skul()
-    Enemy = [Skul() for i in range(10)]
+    Enemy = [Skul() for i in range(50)]
     game_world.add_objects(Enemy, 1)
 
     global Enemy2
     server.Enemy2 = Skul2()
-    Enemy2 = [Skul2() for i in range(10)]
+    Enemy2 = [Skul2() for i in range(50)]
     game_world.add_objects(Enemy2, 1)
 
     global Enemy3
     server.Enemy3 = Skul3()
-    Enemy3 = [Skul3() for i in range(10)]
+    Enemy3 = [Skul3() for i in range(50)]
     game_world.add_objects(Enemy3, 1)
 
     global Enemy4
     server.Enemy4 = Skul4()
-    Enemy4 = [Skul4() for i in range(10)]
+    Enemy4 = [Skul4() for i in range(50)]
     game_world.add_objects(Enemy4, 1)
 
     # 충돌 대상 정보 등록
