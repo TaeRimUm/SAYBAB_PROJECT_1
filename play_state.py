@@ -129,15 +129,15 @@ def draw():
         game_object.draw()
     update_canvas()
 
-def test_self():
-    import play_state
-
-    pico2d.open_canvas()
-    game_framework.run(play_state)
-    pico2d.clear_canvas()
-
-if __name__ == '__main__':
-    test_self()
+# def test_self():
+#     import play_state
+#
+#     pico2d.open_canvas()
+#     game_framework.run(play_state)
+#     pico2d.clear_canvas()
+#
+# if __name__ == '__main__':
+#     test_self()
 # 이건 뭐징 일단 넣고봄.
 
 
