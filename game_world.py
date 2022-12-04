@@ -1,5 +1,3 @@
-import pickle
-
 # layer 0: Background Objects
 # layer 1: Foreground Objects
 objects = [[], [], [], [],[]]
@@ -36,11 +34,6 @@ def clear():
     # nullify objects and collision group delete all the contained objects - automatic garbage collection
     objects = [[], [], []]
     collision_group = dict()
-
-    # for o in all_objects():
-    #     del o
-    # for layer in objects:
-    #     layer.clear()
 
 
 def add_collision_pairs(a, b, group):
@@ -83,18 +76,5 @@ def remove_collision_object(o):
 def update():
     for game_object in all_objects():
         game_object.update()
-
-
-# def save():
-#     game = [objects, collision_group]
-#     with open('game.sav', 'wb') as f:
-#         pickle.dump(game, f)
-#
-# def load():
-#     global objects, collision_group
-#     with open('game.sav', 'rb') as f:
-#         game = pickle.load(f)
-#         objects, collision_group = game[0], game[1]
-
 
 
