@@ -1,23 +1,8 @@
-# import random
-# import json
-# import pickle
-# import os
-
 from pico2d import *
 import game_framework
-# import game_world
-# import server
+
 
 import play_state
-
-# from saybar import Saybar
-# from Enemy import Skul
-# from Enemy2 import Skul2
-# from Enemy3 import Skul3
-# from Enemy4 import Skul4
-#
-# from background import FixedBackground
-# from Hamburger import hamburger
 
 menu = None
 def enter():
@@ -53,9 +38,6 @@ def handle_events():
         elif event.type == SDL_KEYDOWN and event.key == SDLK_n:
             create_new_world()
             game_framework.change_state(play_state)
-        # elif event.type == SDL_KEYDOWN and event.key == SDLK_l:
-        #     load_saved_world()
-        #     game_framework.change_state(play_state)
 
 def update():
     pass
