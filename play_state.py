@@ -1,12 +1,8 @@
-import random
-import json
-import os
-
 from pico2d import *
 
 import game_framework
 import game_world
-import load_state
+
 import server
 import gamestop
 from saybar import Saybar
@@ -128,17 +124,6 @@ def draw():
     for game_object in game_world.all_objects():
         game_object.draw()
     update_canvas()
-
-# def test_self():
-#     import play_state
-#
-#     pico2d.open_canvas()
-#     game_framework.run(play_state)
-#     pico2d.clear_canvas()
-#
-# if __name__ == '__main__':
-#     test_self()
-# 이건 뭐징 일단 넣고봄.
 
 
 
