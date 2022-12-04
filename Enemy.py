@@ -1,13 +1,9 @@
 import random
-import time
-import schedule
-    #pip install schedule
 import Hamburger
 import game_framework
 import server
 from pico2d import *
 import game_world
-import winsound
 
 from BehaviorTree import BehaviorTree, Selector, Sequence, Leaf
 from Hamburger import hamburger
@@ -37,9 +33,6 @@ class Skul: #왼쪽
             Skul.images = {}
             for name in animation_names:
                 Skul.images[name] = [load_image("./Skul_1/" + name + " (%d)" % i + ".png") for i in range(1, 11)]
-
-    # def do(self):
-    #     self.x = clamp(0, self.x, 1600)
 
     def __init__(self, name='NONAME', x=0, y=0, size=1):
         print('Skul에 있는 메소드 실행(해골 소환)')
@@ -89,9 +82,6 @@ class Skul: #왼쪽
             return BehaviorTree.RUNNING
 
     def flee_from_saybar(self):
-        # fill here
-        # move_to_node = Leaf('Move To', self.move_to)
-        # self.bt = BehaviorTree(move_to_node)
 
         distance = self.calculate_squared_distance(self, server.saybar)
         if distance > (PIXEL_PER_METER * 10) ** 2:
@@ -145,7 +135,6 @@ class Skul: #왼쪽
             else:
                 Skul.images['Walk'][int(self.frame)].draw(sx, sy, 100, 100)
 
-
         #draw_rectangle(*self.get_bb())  # pico2d 가 제공하는 사각형 그리는거
         #이건 야매 방법인데, sx랑 sy를 어케든 만지면 (충돌박스 + 해골이미지) 같이 움직이게 할 수 있는데,
         #시간은 없고, 유혹을 견디지 못하고... 야매로 해결해 버렸다.....
@@ -193,33 +182,3 @@ class Skul: #왼쪽
         if distance > (PIXEL_PER_METER * 10) ** 2:
             self.speed = 0
             return BehaviorTree.FAIL
-
-        # if self.hp > Hamburger.hp:
-        #     self.dir = math.atan2(Hamburger.y - self.y, Hamburger.x - self.x)
-        #     if distance < (PIXEL_PER_METER * 0.5) ** 2:
-        #         self.speed = 0
-        #         return BehaviorTree.SUCCESS
-        #     else:
-        #         self.speed = RUN_SPEED_PPS
-        #         return BehaviorTree.RUNNING
-        # else:
-        #     self.speed = 0
-        #     return BehaviorTree.FAIL
-
-    # def flee_from_Hamburger(self):
-    #     # fill here
-    #     # move_to_node = Leaf('Move To', self.move_to)
-    #     # self.bt = BehaviorTree(move_to_node)
-    #
-    #     distance = self.calculate_squared_distance(self, server.Hamburger)
-    #     if distance > (PIXEL_PER_METER * 10) ** 2:
-    #         self.speed = 0
-    #         return BehaviorTree.FAIL
-    #
-    #     if self.hp <= server.Hamburger.hp:
-    #         self.dir = math.atan2(self.y - hamburger.y, self.x - hamburger.x)
-    #         self.speed = RUN_SPEED_PPS
-    #         return BehaviorTree.RUNNING
-    #     else:
-    #         self.speed = 0
-    #         return BehaviorTree.FAIL
