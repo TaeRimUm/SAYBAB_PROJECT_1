@@ -1,5 +1,4 @@
 import random
-import game_framework
 import server
 from pico2d import *
 import game_world
