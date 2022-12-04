@@ -97,7 +97,7 @@ class WalkingState:
     def draw(self):
         sx, sy = self.x - server.background.window_left, self.y - server.background.window_bottom
 
-        self.font.draw(sx - 40, sy + 40, '(%d, %d)' % (self.x, self.y), (25, 25, 0))
+        # self.font.draw(sx - 40, sy + 40, '(%d, %d)' % (self.x, self.y), (25, 25, 0))
 
         if self.attack_velocity == 1:                   #D키 입력 받으면, 투명한 애니출력.
             self.image.clip_draw(int(self.frame) * 100, 400, 100, 100, sx, sy)
