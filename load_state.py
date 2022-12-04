@@ -53,9 +53,9 @@ def handle_events():
         elif event.type == SDL_KEYDOWN and event.key == SDLK_n:
             create_new_world()
             game_framework.change_state(play_state)
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_l:
-            load_saved_world()
-            game_framework.change_state(play_state)
+        # elif event.type == SDL_KEYDOWN and event.key == SDLK_l:
+        #     load_saved_world()
+        #     game_framework.change_state(play_state)
 
 def update():
     pass
