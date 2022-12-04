@@ -33,11 +33,6 @@ class FixedBackground:
         pass
 
 
-
-
-
-
-
 # class TileBackground:
 #
 #     def __init__(self):
