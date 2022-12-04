@@ -173,8 +173,8 @@ class Skul3: #맨 아래
             if type(o) is hamburger:            #그게 햄버거인지 아닌지 파악. 햄버거만 찾아야 함.
                 Hamburger = o                   #그 햄버거에 대해서
                 distance = (Hamburger.x - self.x) ** 2 + (Hamburger.y - self.y) ** 2 #햄버거와 해골의 거리를 계산
-                if distance < (PIXEL_PER_METER * 100) ** 2 and distance <= shortest_distance:
-                    #그 계산한 거리가 100M 이하이고, 동시에 distance < 최대 거리(가장 긴 거리): 이면
+                if distance < (PIXEL_PER_METER * 1000) ** 2 and distance <= shortest_distance:
+                    #그 계산한 거리가 1000 이하이고, 동시에 distance < 최대 거리(가장 긴 거리): 이면
                     self.target_Hamburger = Hamburger #타겟에 발견됐으면 현재 햄버거로 해주기.
                     shortest_distance = distance
         if self.target_Hamburger is not None: #이렇게 해서 가장 가까운걸 찾기! 그 햄버거가 찾아졌으면,
@@ -196,17 +196,17 @@ class Skul3: #맨 아래
             self.speed = 0
             return BehaviorTree.FAIL
 
-        if self.hp > Hamburger.hp:
-            self.dir = math.atan2(Hamburger.y - self.y, Hamburger.x - self.x)
-            if distance < (PIXEL_PER_METER * 0.5) ** 2:
-                self.speed = 0
-                return BehaviorTree.SUCCESS
-            else:
-                self.speed = RUN_SPEED_PPS
-                return BehaviorTree.RUNNING
-        else:
-            self.speed = 0
-            return BehaviorTree.FAIL
+        # if self.hp > Hamburger.hp:
+        #     self.dir = math.atan2(Hamburger.y - self.y, Hamburger.x - self.x)
+        #     if distance < (PIXEL_PER_METER * 0.5) ** 2:
+        #         self.speed = 0
+        #         return BehaviorTree.SUCCESS
+        #     else:
+        #         self.speed = RUN_SPEED_PPS
+        #         return BehaviorTree.RUNNING
+        # else:
+        #     self.speed = 0
+        #     return BehaviorTree.FAIL
 
     # def flee_from_Hamburger(self):
     #     # fill here
