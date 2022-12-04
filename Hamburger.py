@@ -16,7 +16,7 @@ class hamburger:
 
         if hamburger.eat_sound is None:
             hamburger.eat_sound = load_wav('nyang.mp3')
-            hamburger.eat_sound.set_volume(32)
+            hamburger.eat_sound.set_volume(8)
 
         self.x, self.y, self.fall_speed = random.randint(100, 1600), random.randint(100, 750), 0
 
