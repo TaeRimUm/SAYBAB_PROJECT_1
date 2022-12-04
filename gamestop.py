@@ -1,7 +1,6 @@
 from pico2d import *
 import game_framework
 import play_state
-import time
 
 running = True
 frame = 0
@@ -15,13 +14,13 @@ def enter():
 def exit():
     global gamestop
     del gamestop
-    # fill here
+
     pass
 
 def update():
     pass
 
-def do(self):
+def do():
     pass
 
 def draw():
@@ -40,15 +39,11 @@ def handle_events():
     for event in events:
         if event.type == SDL_QUIT:
             game_framework.quit()
-        elif event.type == SDL_KEYDOWN: #and event.key == SDLK_ESCAPE:
-            # game_framework.change_state(logo_state)
+        elif event.type == SDL_KEYDOWN:
+
             match event.key:
                 case pico2d.SDLK_w:
                     print('일시정지 끝남')
                     game_framework.pop_state()
 
-                    #RD -> Q -> RU -> W ==> RD (change to RU)
-                    #LD -> Q -> LU -> W ==> LD (change to LU)
-                    #즉 이동키를 누른 상태로 일시정지를 누르고, 이동키를 땠고 일시정지를 풀면
-                    #캐릭터가 이동키를 누른 방향으로 쭈우욱 달려나감.
 
